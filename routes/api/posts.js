@@ -140,5 +140,80 @@ router.post('/like/:id', passport.authenticate('jwt', {
 
 });
 
+// @route   POST api/posts/unlike/id(post id that's been like)
+// @desc    Unlike the post
+// @access  Private
+router.post('/unlike/:id', passport.authenticate('jwt', {
+  session: false
+}), (req, res) => {
+  //taking the logged in user
+  console.log("ala")
+  Profile.findOne({
+      user: req.user.id
+    })
+    .then(profile => {
+      //taking the post which we are about to like
+      console.log(`User is ${profile.user} `)
+      Post.findById(req.params.id)
+        .then(post => {
+          console.log(`Post is ${post} `)
+          //see if he's already liked the post, we will use filter first
+          if (post.likes.filter(like => like.user.toString() === req.user.id).length === 0) {
+            return res.status(400).json({
+              notliked: `You have not yet liked this post`
+            });
+          }
+          //Get remove index
+          const removeIndex = post.likes
+            .map(item => item.user.toString())
+            .indexOf(req.user.id);
+
+          //Splice it out of the array
+          post.likes.splice(removeIndex, 1);
+          post.save().then(post => res.json(post));
+        })
+        .catch(err => res.status(404).json({
+          postnotfound: `No post found`
+        }));
+    }).catch(err => res.status(404).json({
+      postnotfound: `No User found`
+    }));
+
+});
+
+// @route   POST api/posts/comment/:id(post id that's been like)
+// @desc    Add comment to post
+// @access  Private
+
+router.post('/comment/:id', passport.authenticate('jwt', {
+  session: false
+}), (req, res) => {
+  //Validation
+  const {
+    errors,
+    isValid
+  } = validatePostInput(req.body);
+  if (!isValid) {
+    res.status(400).json(errors);
+  }
+  console.log(`Body is ${req.user.name} `)
+  Post.findById(req.params.id)
+    .then(post => {
+      const newComment = {
+        text: req.body.text,
+        name: req.user.name,
+        avatar: req.user.avatar,
+        user: req.user.id
+      }
+
+      //Add comments to array
+      post.comments.unshit(newComment);
+      //Save
+      post.save().then(res.json(post));
+    }).catch(err => res.status(404).json({
+      postnotfound: "No Post Found"
+
+    }));
+});
 
 module.exports = router;
