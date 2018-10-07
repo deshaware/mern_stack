@@ -5,6 +5,7 @@ import classnames from "classnames";
 //whenever we use redux in component, we gotta import connect
 import { connect } from "react-redux";
 import { registerUser } from "../../actions/authActions";
+import TextFieldGroup from "../common/TextFieldGroup";
 
 class Register extends Component {
   //component state, not for the application state
@@ -21,6 +22,12 @@ class Register extends Component {
     };
     this.onChange = this.onChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
+  }
+
+  componentDidMount() {
+    if (this.props.auth.isAuthenticated) {
+      this.props.history.push("/dashboard");
+    }
   }
 
   componentWillReceiveProps(nextProps) {
@@ -62,7 +69,14 @@ class Register extends Component {
                 Create your DevConnector account
               </p>
               <form onSubmit={this.onSubmit}>
-                <div className="form-group">
+                <TextFieldGroup
+                  placeholder="Name"
+                  name="name"
+                  value={this.state.name}
+                  onChange={this.onChange}
+                  error={errors.name}
+                />
+                {/* <div className="form-group">
                   <input
                     type="text"
                     //className="form-control form-control-lg"
@@ -77,8 +91,20 @@ class Register extends Component {
                   {errors.name && (
                     <div className="invalid-feedback">{errors.name}</div>
                   )}
-                </div>
-                <div className="form-group">
+                </div> */}
+
+                <TextFieldGroup
+                  type="email"
+                  placeholder="Email Address"
+                  name="email"
+                  value={this.state.email}
+                  onChange={this.onChange}
+                  error={errors.email}
+                  info="This site uses Gravatar so if you want a profile image, use a
+                  Gravatar email"
+                />
+
+                {/* <div className="form-group">
                   <input
                     type="email"
                     className={classnames("form-control form-control-lg", {
@@ -96,8 +122,17 @@ class Register extends Component {
                     This site uses Gravatar so if you want a profile image, use
                     a Gravatar email
                   </small>
-                </div>
-                <div className="form-group">
+                </div> */}
+
+                <TextFieldGroup
+                  type="Password"
+                  placeholder="password"
+                  name="password"
+                  value={this.state.password}
+                  onChange={this.onChange}
+                  error={errors.password}
+                />
+                {/* <div className="form-group">
                   <input
                     type="password"
                     className={classnames("form-control form-control-lg", {
@@ -111,8 +146,16 @@ class Register extends Component {
                   {errors.password && (
                     <div className="invalid-feedback">{errors.password}</div>
                   )}
-                </div>
-                <div className="form-group">
+                </div> */}
+                <TextFieldGroup
+                  type="password"
+                  placeholder="Confirm Password"
+                  name="password2"
+                  value={this.state.password2}
+                  onChange={this.onChange}
+                  error={errors.password2}
+                />
+                {/* <div className="form-group">
                   <input
                     type="password"
                     className={classnames("form-control form-control-lg", {
@@ -126,7 +169,7 @@ class Register extends Component {
                   {errors.password2 && (
                     <div className="invalid-feedback">{errors.password2}</div>
                   )}
-                </div>
+                </div> */}
                 <input type="submit" className="btn btn-info btn-block mt-4" />
               </form>
             </div>

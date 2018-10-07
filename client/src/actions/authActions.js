@@ -28,7 +28,7 @@ export const registerUser = (userData, history) => dispatch => {
 
 export const loginUser = userData => dispatch => {
   axios
-    .post("api/users/login", userData)
+    .post("/api/users/login", userData)
     .then(res => {
       //Save to local storage(Token)
       const { token } = res.data;
@@ -55,4 +55,14 @@ export const setCurrentUser = decoded => {
     type: SET_CURRENT_USER,
     payload: decoded
   };
+};
+
+// Log user out
+export const logoutUser = () => dispatch => {
+  //Remove the token from local storage
+  localStorage.removeItem("jwtToken");
+  // remove auth header for future request
+  setAuthToken(false);
+  //Set current user to an empty object , which will also setAuthenticated to false
+  dispatch(setCurrentUser({})); //decoded is null, means payload is gonna be empty object in reducer
 };
