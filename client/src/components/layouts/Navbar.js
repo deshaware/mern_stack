@@ -81,7 +81,7 @@ class Navbar extends Component {
                   {" "}
                   Developers
                 </a> */}
-                <Link className="nav-link" to="/profiles">
+                <Link className="nav-link" to="/create-profile">
                   Developers
                 </Link>
               </li>

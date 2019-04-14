@@ -17,7 +17,11 @@ class Dashboard extends Component {
     if(profile === null || loading){
       dashboardContent = <h4><Spinner /></h4>
     } else {
-      dashboardContent = <div></div>
+      dashboardContent = <div>
+        <h3>
+          Welcome, {name}
+        </h3>
+      </div>
     }
     return (
       <div className="dashboard">
@@ -37,7 +41,7 @@ class Dashboard extends Component {
 
 const mapStateToProps = state =>{
   return{
-    auth:state.auth,
+    auth:state.auth.user,
     profile:state.profile
 
   }
