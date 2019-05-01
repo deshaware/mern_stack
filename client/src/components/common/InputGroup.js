@@ -17,11 +17,10 @@ const InputGroup = ({
     <div className="input-group mb-3">
       <div className="input-group-prepend">
         <span className="input-group-text">
-          <i className={icon}></i>
+          <i className={icon} />
         </span>
       </div>  
       <input
-        type={type}
         className={classnames("form-control form-control-lg", {
           "is-invalid": error //this means is invalid will be added only when errors.email exist
         })}

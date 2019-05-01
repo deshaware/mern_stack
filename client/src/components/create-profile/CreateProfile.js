@@ -3,15 +3,16 @@ import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import TextFieldGroup from '../common/TextFieldGroup';  
 import TextAreaFieldGroup from '../common/TextAreaFieldGroup';  
-import InputFieldGroup from '../common/TextFieldGroup';  
+import InputGroup from '../common/InputGroup';  
 import SelectListGroup from '../common/SelectListGroup';  
+import {createProfile} from '../../actions/profileActions';
 
 class CreateProfile extends React.Component{
     constructor(props){
         super(props);
 
         this.state = {
-            displaySocialInputer:false, 
+            displaySocialInputs:false, 
             handle:"",
             company:"",
             website:"",
@@ -33,7 +34,24 @@ class CreateProfile extends React.Component{
 
     onSubmit(e){
         e.preventDefault();
-        console.log("Submit")
+        console.log("Submit");
+        const profileData = {
+            displaySocialInputs:false, 
+            handle:"",
+            company:"",
+            website:"",
+            location:'',
+            status:'',
+            skiils:'',
+            githubusername:'',
+            bio:'',
+            twitter:'',
+            facebook:'',
+            linkedin:'',
+            youtube:'',
+            instagram:''
+        }
+        this.props.createProfile(e)
     }
 
     onChange(e){
@@ -42,7 +60,60 @@ class CreateProfile extends React.Component{
     }
     
     render(){
-        const {errors} = this.state;
+        const {errors,displaySocialInputs} = this.state;
+
+        let socialInputs;
+        if (displaySocialInputs) {
+            socialInputs = (
+                <div>
+                    <InputGroup 
+                        placeholder="Twitter"
+                        name="twitter"
+                        icon="fab fa-twitter"
+                        value={this.state.twitter}
+                        onChange={this.onChange}
+                        error={errors.twitter}
+                        info="Your valid Twitter Handle"
+                     />
+                    <InputGroup 
+                        placeholder="facebook"
+                        name="facebook"
+                        icon="fab fa-facebook"
+                        value={this.state.facebook}
+                        onChange={this.onChange}
+                        error={errors.facebook}
+                        info="Your valid facebook Handle"
+                     />
+                     <InputGroup 
+                        placeholder="linkedin"
+                        name="linkedin"
+                        icon="fab fa-linkedin"
+                        value={this.state.linkedin}
+                        onChange={this.onChange}
+                        error={errors.linkedin}
+                        info="Your valid linkedin Handle"
+                     />
+                     <InputGroup 
+                        placeholder="youtube"
+                        name="youtube"
+                        icon="fab fa-youtube"
+                        value={this.state.youtube}
+                        onChange={this.onChange}
+                        error={errors.youtube}
+                        info="Your valid youtube Handle"
+                     />
+                     <InputGroup 
+                        placeholder="instagram"
+                        name="instagram"
+                        icon="fab fa-instagram"
+                        value={this.state.instagram}
+                        onChange={this.onChange}
+                        error={errors.instagram}
+                        info="Your valid instagram Handle"
+                     />
+                </div>
+            );
+        }
         //select options for status
         const options = [
             {label:"* Select Professional Status",value:"0"},
@@ -53,6 +124,7 @@ class CreateProfile extends React.Component{
             {label:"Data Scientist",value:"Data Scientist"},
             {label:"Freelancer",value:"Freelancer"}
         ];
+
         return(
             <div className="create-profile">
                 <div className="container">
@@ -137,6 +209,21 @@ class CreateProfile extends React.Component{
                                     error={errors.bio}
                                     info="Tell us little bit about yourself"
                                 />
+
+                                <div className="mb-3">
+                                <button
+                                 onClick={
+                                     () => {
+                                         this.setState(prevState => ({
+                                             displaySocialInputs:!prevState.displaySocialInputs
+                                         }));}
+                                 }
+                                >
+                                Add Social Networking Links</button>
+                                <span className="text-muted">Optional</span>
+                                </div>
+                                {socialInputs}
+                                <input type="submit" value="submit" className="btn btn-info btn-block mt-4  " />
                             </form>
                         </div>
                     </div>
@@ -159,5 +246,5 @@ CreateProfile.propTypes = {
 }
 
 export default connect(mapStateToProps,{
-
+    createProfile
 })(CreateProfile);
